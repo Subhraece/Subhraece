@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Answer Key Audio (Fast Mode)</title>
+    <title>Answer Key (Numeric Audio)</title>
     <style>
         body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
@@ -22,7 +22,8 @@
             width: 100%;
             text-align: center;
         }
-        h1 { color: #333; margin-bottom: 20px; font-size: 22px;}
+        h1 { color: #333; margin-bottom: 10px; font-size: 22px;}
+        p { color: #666; font-size: 14px; margin-bottom: 20px;}
         
         .controls {
             display: grid;
@@ -52,18 +53,21 @@
 
         .display-area {
             margin-top: 20px;
-            font-size: 40px; /* ফন্ট বড় করা হয়েছে যাতে দূর থেকে দেখা যায় */
+            font-size: 45px;
             font-weight: bold;
             color: #2c3e50;
-            min-height: 60px;
+            min-height: 80px;
             padding: 20px;
             background: #ecf0f1;
             border-radius: 5px;
             border: 2px solid #bdc3c7;
             display: flex;
+            flex-direction: column;
             align-items: center;
             justify-content: center;
         }
+        
+        .sub-text { font-size: 16px; color: #7f8c8d; font-weight: normal; margin-top: 5px;}
 
         .speed-control {
             margin: 20px 0;
@@ -79,12 +83,13 @@
 <body>
 
 <div class="container">
-    <h1>🔊 Fast Answer Checker</h1>
+    <h1>🔊 Numeric Answer Audio</h1>
+    <p>Audio Format: A=1, B=2, C=3, D=4</p>
     
     <div class="speed-control">
         <label for="rate">Speed:</label>
         <input type="range" id="rate" min="0.5" max="1.5" step="0.1" value="0.9">
-        <span id="speed-val">Normal</span>
+        <span id="speed-val">0.9x</span>
     </div>
 
     <div class="controls">
@@ -132,6 +137,14 @@
         ]
     };
 
+    // Mapping for conversion
+    const letterMap = {
+        'A': '1',
+        'B': '2',
+        'C': '3',
+        'D': '4'
+    };
+
     let synth = window.speechSynthesis;
 
     document.getElementById('rate').addEventListener('input', function(e) {
@@ -153,7 +166,6 @@
         const rate = document.getElementById('rate').value;
         const display = document.getElementById('display');
         
-        // Subject announcement
         let titleUtterance = new SpeechSynthesisUtterance(subject);
         titleUtterance.rate = rate;
         synth.speak(titleUtterance);
@@ -163,12 +175,14 @@
         answers.forEach((item) => {
             let parts = item.split(" ");
             let questionNum = parts[0];
-            let option = parts[1];
+            let optionLetter = parts[1]; // A, B, C, D
             let extra = parts.slice(2).join(" "); 
 
-            // CHANGE: Short format "1... D"
-            // The comma creates a micro-pause which is better for listening
-            let speakText = `${questionNum}, ${option}`;
+            // Convert Letter to Number for Audio
+            let optionNumber = letterMap[optionLetter]; 
+            
+            // Audio Text: "One... 4" instead of "One... D"
+            let speakText = `${questionNum}, ${optionNumber}`;
             
             if(extra) {
                 speakText += `, ${extra}`; 
@@ -177,16 +191,16 @@
             let utter = new SpeechSynthesisUtterance(speakText);
             utter.rate = rate;
             
-            // On start of each number, update display
             utter.onstart = function() {
-                // Display looks like "1 -> D"
-                display.innerText = `${questionNum} ➝ ${option} ${extra ? '('+extra+')' : ''}`;
+                // Visual Display shows BOTH Letter and Number for clarity
+                // Example: 1 ➝ D [4]
+                display.innerHTML = `${questionNum} ➝ ${optionLetter} <br><span class="sub-text">[Audio: ${optionNumber}]</span>`;
             };
 
             synth.speak(utter);
         });
 
-        let endUtter = new SpeechSynthesisUtterance("Done");
+        let endUtter = new SpeechSynthesisUtterance("Finished");
         endUtter.rate = rate;
         endUtter.onstart = function() {
             display.innerText = "Done ✅";
