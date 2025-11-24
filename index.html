@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Answer Key (Numeric Audio)</title>
+    <title>Smart Answer Audio</title>
     <style>
         body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
@@ -15,89 +15,143 @@
         }
         .container {
             background-color: white;
-            padding: 25px;
-            border-radius: 10px;
-            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
-            max-width: 600px;
+            padding: 20px;
+            border-radius: 12px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+            max-width: 500px;
             width: 100%;
             text-align: center;
         }
-        h1 { color: #333; margin-bottom: 10px; font-size: 22px;}
-        p { color: #666; font-size: 14px; margin-bottom: 20px;}
+        h1 { color: #2c3e50; margin-bottom: 5px; font-size: 22px;}
+        p { color: #7f8c8d; font-size: 14px; margin-bottom: 20px;}
         
+        /* Input Area */
+        .settings-area {
+            background: #eef2f3;
+            padding: 15px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 10px;
+        }
+        input[type="number"] {
+            width: 60px;
+            padding: 8px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            text-align: center;
+            font-size: 16px;
+            font-weight: bold;
+        }
+
+        /* Speed Control */
+        .speed-control {
+            margin-bottom: 15px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 10px;
+        }
+
+        /* Buttons Grid */
         .controls {
             display: grid;
             grid-template-columns: 1fr 1fr;
             gap: 10px;
-            margin-bottom: 20px;
+            margin-bottom: 15px;
+        }
+        
+        .main-actions {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 10px;
+            margin-bottom: 15px;
         }
 
         button {
-            padding: 15px;
-            font-size: 16px;
+            padding: 12px;
+            font-size: 15px;
             cursor: pointer;
             border: none;
-            border-radius: 5px;
+            border-radius: 6px;
             color: white;
-            transition: background 0.3s;
+            transition: transform 0.2s, opacity 0.2s;
             font-weight: bold;
         }
+        button:active { transform: scale(0.98); }
 
         .btn-math { background-color: #e74c3c; }
         .btn-phy { background-color: #3498db; }
         .btn-chem { background-color: #f1c40f; color: #333; }
         .btn-bio { background-color: #2ecc71; }
-        .btn-stop { background-color: #333; grid-column: span 2; margin-top: 10px;}
+        
+        .btn-all { 
+            background-color: #8e44ad; 
+            grid-column: span 2; 
+            font-size: 18px;
+            padding: 15px;
+        }
+        
+        .btn-pause { background-color: #e67e22; font-size: 16px;}
+        .btn-stop { background-color: #333; font-size: 16px;}
 
-        button:hover { opacity: 0.9; transform: scale(1.02); }
-
+        /* Display Screen */
         .display-area {
-            margin-top: 20px;
-            font-size: 45px;
+            margin-top: 10px;
+            font-size: 32px;
             font-weight: bold;
             color: #2c3e50;
-            min-height: 80px;
+            min-height: 100px;
             padding: 20px;
-            background: #ecf0f1;
-            border-radius: 5px;
+            background: #fff;
             border: 2px solid #bdc3c7;
+            border-radius: 8px;
             display: flex;
             flex-direction: column;
             align-items: center;
             justify-content: center;
         }
-        
-        .sub-text { font-size: 16px; color: #7f8c8d; font-weight: normal; margin-top: 5px;}
+        .sub-text { font-size: 16px; color: #95a5a6; margin-top: 5px; font-weight: normal; }
+        .active-subject { font-size: 18px; color: #8e44ad; margin-bottom: 5px; text-transform: uppercase;}
 
-        .speed-control {
-            margin: 20px 0;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            gap: 10px;
-        }
-        
-        label { font-weight: bold; }
+        /* Highlight current state */
+        .playing { border-color: #2ecc71; background-color: #f0fff4; }
+        .paused { border-color: #e67e22; background-color: #fffaf0; }
     </style>
 </head>
 <body>
 
 <div class="container">
-    <h1>🔊 Numeric Answer Audio</h1>
-    <p>Audio Format: A=1, B=2, C=3, D=4</p>
-    
+    <h1>🎧 Smart Audio Key</h1>
+    <p>Format: A=1, B=2, C=3, D=4</p>
+
+    <div class="settings-area">
+        <label for="startNum">Start from Q:</label>
+        <input type="number" id="startNum" value="1" min="1" max="25">
+    </div>
+
     <div class="speed-control">
-        <label for="rate">Speed:</label>
+        <label>Speed:</label>
         <input type="range" id="rate" min="0.5" max="1.5" step="0.1" value="0.9">
         <span id="speed-val">0.9x</span>
     </div>
 
+    <div class="main-actions">
+        <button class="btn-all" onclick="playAllSubjects()">▶ Play ALL Subjects</button>
+    </div>
+
     <div class="controls">
-        <button class="btn-math" onclick="readAnswers('Mathematics')">Math</button>
-        <button class="btn-phy" onclick="readAnswers('Physics')">Physics</button>
-        <button class="btn-chem" onclick="readAnswers('Chemistry')">Chemistry</button>
-        <button class="btn-bio" onclick="readAnswers('Biology')">Biology</button>
-        <button class="btn-stop" onclick="stopReading()">🛑 STOP</button>
+        <button class="btn-math" onclick="playSubject('Mathematics')">Math Only</button>
+        <button class="btn-phy" onclick="playSubject('Physics')">Physics Only</button>
+        <button class="btn-chem" onclick="playSubject('Chemistry')">Chem Only</button>
+        <button class="btn-bio" onclick="playSubject('Biology')">Biology Only</button>
+    </div>
+
+    <div class="main-actions">
+        <button id="pauseBtn" class="btn-pause" onclick="togglePause()">⏸ Pause</button>
+        <button class="btn-stop" onclick="stopEverything()">🛑 Reset</button>
     </div>
 
     <div id="display" class="display-area">
@@ -106,109 +160,171 @@
 </div>
 
 <script>
+    // --- DATA ---
     const answerData = {
         'Mathematics': [
-            "1 D", "2 C", "3 C", "4 C", "5 C", 
-            "6 B", "7 A", "8 B", "9 C", "10 D", 
-            "11 C", "12 C", "13 A", "14 A", "15 C", 
-            "16 C", "17 B", "18 A", "19 D", "20 A", 
+            "1 D", "2 C", "3 C", "4 C", "5 C", "6 B", "7 A", "8 B", "9 C", "10 D", 
+            "11 C", "12 C", "13 A", "14 A", "15 C", "16 C", "17 B", "18 A", "19 D", "20 A", 
             "21 B", "22 D", "23 B", "24 B", "25 A"
         ],
         'Physics': [
-            "1 B", "2 C", "3 B", "4 B", "5 A", 
-            "6 B", "7 D", "8 B", "9 C", "10 C", 
-            "11 A", "12 C", "13 B", "14 C", "15 A", 
-            "16 C", "17 A", "18 B", "19 C", "20 A", 
+            "1 B", "2 C", "3 B", "4 B", "5 A", "6 B", "7 D", "8 B", "9 C", "10 C", 
+            "11 A", "12 C", "13 B", "14 C", "15 A", "16 C", "17 A", "18 B", "19 C", "20 A", 
             "21 A", "22 B", "23 A", "24 A", "25 A"
         ],
         'Chemistry': [
-            "1 C", "2 C", "3 A", "4 C", "5 A", 
-            "6 D", "7 C", "8 B", "9 B", "10 B", 
-            "11 B", "12 D", "13 C", "14 D", "15 B", 
-            "16 B", "17 B", "18 A", "19 B", "20 D", 
+            "1 C", "2 C", "3 A", "4 C", "5 A", "6 D", "7 C", "8 B", "9 B", "10 B", 
+            "11 B", "12 D", "13 C", "14 D", "15 B", "16 B", "17 B", "18 A", "19 B", "20 D", 
             "21 C", "22 B", "23 B", "24 C", "25 C"
         ],
         'Biology': [
-            "1 C", "2 B", "3 B", "4 A", "5 D", 
-            "6 Grace", "7 Grace", "8 Grace", "9 A", "10 C", 
-            "11 B", "12 B", "13 Grace", "14 C", "15 B", 
-            "16 A", "17 D", "18 B", "19 D", "20 A", 
-            "21 Grace", "22 B", "23 D", "24 A", "25 C"
+            "1 C", "2 B", "3 B", "4 A", "5 D", "6 C Grace", "7 C Grace", "8 A Grace", "9 A", "10 C", 
+            "11 B", "12 B", "13 C Grace", "14 C", "15 B", "16 A", "17 D", "18 B", "19 D", "20 A", 
+            "21 B Grace", "22 B", "23 D", "24 A", "25 C"
         ]
     };
 
-    // Mapping for conversion
-    const letterMap = {
-        'A': '1',
-        'B': '2',
-        'C': '3',
-        'D': '4'
-    };
+    const letterMap = {'A': '1', 'B': '2', 'C': '3', 'D': '4'};
+    const subjectsOrder = ['Mathematics', 'Physics', 'Chemistry', 'Biology'];
 
+    // --- STATE VARIABLES ---
     let synth = window.speechSynthesis;
+    let playlist = []; // Array of objects { textToSpeak, displayHtml, subjectName }
+    let currentIndex = 0;
+    let isPaused = false;
+    let currentUtterance = null;
 
-    document.getElementById('rate').addEventListener('input', function(e) {
-        let val = e.target.value;
-        document.getElementById('speed-val').innerText = `${val}x`;
+    // --- UI HELPERS ---
+    const display = document.getElementById('display');
+    const pauseBtn = document.getElementById('pauseBtn');
+    
+    document.getElementById('rate').addEventListener('input', (e) => {
+        document.getElementById('speed-val').innerText = `${e.target.value}x`;
     });
 
-    function stopReading() {
-        if (synth.speaking) {
-            synth.cancel();
-            document.getElementById('display').innerText = "Stopped";
+    // --- LOGIC ---
+
+    function generatePlaylistItems(subject, startQ) {
+        const rawList = answerData[subject];
+        let items = [];
+        
+        // Adjust start index (user sees 1-based, array is 0-based)
+        let startIndex = startQ - 1;
+        if (startIndex < 0) startIndex = 0;
+        if (startIndex >= rawList.length) startIndex = 0;
+
+        // Title Item
+        items.push({
+            text: subject,
+            html: `<div class='active-subject'>${subject}</div>Starting...`,
+            type: 'title'
+        });
+
+        for (let i = startIndex; i < rawList.length; i++) {
+            let parts = rawList[i].split(" ");
+            let qNum = parts[0];
+            let optLet = parts[1];
+            let extra = parts.slice(2).join(" ");
+            let optNum = letterMap[optLet];
+
+            let speak = `${qNum}, ${optNum}`;
+            if (extra) speak += `, ${extra}`;
+
+            items.push({
+                text: speak,
+                html: `<div class='active-subject'>${subject}</div>${qNum} ➝ ${optLet}<br><span class='sub-text'>[Audio: ${optNum}]</span>`,
+                type: 'question'
+            });
+        }
+        return items;
+    }
+
+    function playSubject(subject) {
+        stopEverything();
+        let startNum = parseInt(document.getElementById('startNum').value) || 1;
+        playlist = generatePlaylistItems(subject, startNum);
+        playQueue();
+    }
+
+    function playAllSubjects() {
+        stopEverything();
+        let startNum = parseInt(document.getElementById('startNum').value) || 1;
+        
+        // If starting from Q10, it applies to the FIRST subject only. 
+        // Subsequent subjects should start from Q1.
+        
+        playlist = [];
+        
+        subjectsOrder.forEach((sub, idx) => {
+            // First subject uses the input number, others start from 1
+            let sNum = (idx === 0) ? startNum : 1;
+            let items = generatePlaylistItems(sub, sNum);
+            playlist = playlist.concat(items);
+        });
+        
+        playQueue();
+    }
+
+    function playQueue() {
+        if (currentIndex >= playlist.length) {
+            display.innerText = "All Done ✅";
+            display.classList.remove('playing');
+            return;
+        }
+
+        let item = playlist[currentIndex];
+        
+        // UI Update
+        display.innerHTML = item.html;
+        display.classList.add('playing');
+        display.classList.remove('paused');
+        pauseBtn.innerText = "⏸ Pause";
+        isPaused = false;
+
+        // Audio Setup
+        let rate = document.getElementById('rate').value;
+        currentUtterance = new SpeechSynthesisUtterance(item.text);
+        currentUtterance.rate = rate;
+
+        // Logic for next item
+        currentUtterance.onend = function() {
+            if (!isPaused) {
+                currentIndex++;
+                playQueue();
+            }
+        };
+
+        synth.speak(currentUtterance);
+    }
+
+    function togglePause() {
+        if (playlist.length === 0) return;
+
+        if (isPaused) {
+            // RESUME
+            isPaused = false;
+            playQueue(); // Restart the current index
+        } else {
+            // PAUSE
+            isPaused = true;
+            synth.cancel(); // Stop speaking immediately
+            display.classList.add('paused');
+            display.classList.remove('playing');
+            pauseBtn.innerText = "▶ Resume";
         }
     }
 
-    function readAnswers(subject) {
-        stopReading();
-
-        const answers = answerData[subject];
-        const rate = document.getElementById('rate').value;
-        const display = document.getElementById('display');
-        
-        let titleUtterance = new SpeechSynthesisUtterance(subject);
-        titleUtterance.rate = rate;
-        synth.speak(titleUtterance);
-        
-        display.innerText = subject;
-
-        answers.forEach((item) => {
-            let parts = item.split(" ");
-            let questionNum = parts[0];
-            let optionLetter = parts[1]; // A, B, C, D
-            let extra = parts.slice(2).join(" "); 
-
-            // Convert Letter to Number for Audio
-            let optionNumber = letterMap[optionLetter]; 
-            
-            // Audio Text: "One... 4" instead of "One... D"
-            let speakText = `${questionNum}, ${optionNumber}`;
-            
-            if(extra) {
-                speakText += `, ${extra}`; 
-            }
-
-            let utter = new SpeechSynthesisUtterance(speakText);
-            utter.rate = rate;
-            
-            utter.onstart = function() {
-                // Visual Display shows BOTH Letter and Number for clarity
-                // Example: 1 ➝ D [4]
-                display.innerHTML = `${questionNum} ➝ ${optionLetter} <br><span class="sub-text">[Audio: ${optionNumber}]</span>`;
-            };
-
-            synth.speak(utter);
-        });
-
-        let endUtter = new SpeechSynthesisUtterance("Finished");
-        endUtter.rate = rate;
-        endUtter.onstart = function() {
-            display.innerText = "Done ✅";
-        };
-        synth.speak(endUtter);
+    function stopEverything() {
+        synth.cancel();
+        playlist = [];
+        currentIndex = 0;
+        isPaused = false;
+        display.innerText = "Ready";
+        display.classList.remove('playing', 'paused');
+        pauseBtn.innerText = "⏸ Pause";
     }
+
 </script>
 
 </body>
 </html>
-
