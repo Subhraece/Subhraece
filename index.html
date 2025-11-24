@@ -3,11 +3,11 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Ultimate Audio Key</title>
+    <title>Multi-Voice Audio Key</title>
     <style>
         body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background-color: #f0f2f5;
+            background-color: #f4f6f8;
             display: flex;
             flex-direction: column;
             align-items: center;
@@ -21,54 +21,67 @@
             max-width: 500px;
             width: 100%;
         }
-        h1 { color: #2c3e50; text-align: center; font-size: 22px; margin-bottom: 5px;}
+        h1 { color: #2c3e50; text-align: center; font-size: 22px; margin: 0 0 5px 0;}
         p { color: #7f8c8d; text-align: center; font-size: 14px; margin-bottom: 20px;}
 
         /* Subject List */
         .subject-list {
             margin-bottom: 20px;
-            background: #f8f9fa;
-            padding: 10px;
-            border-radius: 8px;
+            background: #fff;
             border: 1px solid #e1e4e8;
+            border-radius: 8px;
         }
         .subject-row {
             display: flex;
             justify-content: space-between;
             align-items: center;
-            padding: 8px 10px;
+            padding: 10px 15px;
             border-bottom: 1px solid #eee;
         }
         .subject-row:last-child { border-bottom: none; }
-
-        .chk-group { font-weight: bold; color: #34495e; cursor: pointer; display: flex; align-items: center; gap: 8px;}
+        .chk-group { font-weight: 600; color: #34495e; display: flex; align-items: center; gap: 8px; cursor: pointer;}
         .start-group { font-size: 14px; color: #666; display: flex; align-items: center; gap: 5px;}
-        .q-input { width: 45px; padding: 4px; border: 1px solid #ccc; border-radius: 4px; text-align: center; font-weight: bold;}
+        .q-input { width: 50px; padding: 5px; border: 1px solid #ccc; border-radius: 4px; text-align: center; font-weight: bold;}
 
-        /* Settings Area (Voice & Speed) */
+        /* Voice Settings */
         .settings-box {
             background: #eef2f3;
             padding: 15px;
             border-radius: 8px;
-            margin-bottom: 15px;
+            margin-bottom: 20px;
+            border: 1px solid #dde1e3;
         }
-        .setting-row {
+        .voice-control {
             display: flex;
-            justify-content: space-between;
-            align-items: center;
+            gap: 10px;
             margin-bottom: 10px;
         }
-        .setting-row:last-child { margin-bottom: 0; }
-        
         select {
-            width: 70%;
+            flex: 1;
             padding: 8px;
             border-radius: 5px;
             border: 1px solid #bdc3c7;
             font-size: 14px;
         }
+        .btn-test {
+            background-color: #3498db;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            padding: 0 15px;
+            cursor: pointer;
+            font-size: 13px;
+        }
 
-        /* Buttons */
+        /* Speed Control */
+        .speed-control {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        input[type=range] { flex: 1; }
+
+        /* Main Buttons */
         .main-actions {
             display: grid;
             grid-template-columns: 1fr 1fr;
@@ -93,11 +106,11 @@
         /* Display */
         .display-area {
             margin-top: 10px;
-            font-size: 32px;
+            font-size: 36px;
             font-weight: bold;
             color: #2c3e50;
-            min-height: 90px;
-            padding: 15px;
+            min-height: 100px;
+            padding: 20px;
             background: #fff;
             border: 2px solid #bdc3c7;
             border-radius: 8px;
@@ -117,44 +130,44 @@
 <body>
 
 <div class="container">
-    <h1>🔊 Ultimate Audio Key</h1>
-    <p>Select Subjects, Voice & Speed</p>
+    <h1>🎧 Exam Audio Assistant</h1>
+    <p>Select Subjects & Customize Voice</p>
 
     <div class="subject-list">
         <div class="subject-row">
             <label class="chk-group"><input type="checkbox" id="chk-Mathematics" checked> Mathematics</label>
-            <div class="start-group">Q: <input type="number" id="start-Mathematics" class="q-input" value="1" min="1" max="25"></div>
+            <div class="start-group">Start Q: <input type="number" id="start-Mathematics" class="q-input" value="1" min="1" max="25"></div>
         </div>
         <div class="subject-row">
             <label class="chk-group"><input type="checkbox" id="chk-Physics" checked> Physics</label>
-            <div class="start-group">Q: <input type="number" id="start-Physics" class="q-input" value="1" min="1" max="25"></div>
+            <div class="start-group">Start Q: <input type="number" id="start-Physics" class="q-input" value="1" min="1" max="25"></div>
         </div>
         <div class="subject-row">
             <label class="chk-group"><input type="checkbox" id="chk-Chemistry" checked> Chemistry</label>
-            <div class="start-group">Q: <input type="number" id="start-Chemistry" class="q-input" value="1" min="1" max="25"></div>
+            <div class="start-group">Start Q: <input type="number" id="start-Chemistry" class="q-input" value="1" min="1" max="25"></div>
         </div>
         <div class="subject-row">
             <label class="chk-group"><input type="checkbox" id="chk-Biology" checked> Biology</label>
-            <div class="start-group">Q: <input type="number" id="start-Biology" class="q-input" value="1" min="1" max="25"></div>
+            <div class="start-group">Start Q: <input type="number" id="start-Biology" class="q-input" value="1" min="1" max="25"></div>
         </div>
     </div>
 
     <div class="settings-box">
-        <div class="setting-row">
-            <label>🗣 Voice:</label>
-            <select id="voiceSelect"><option>Loading voices...</option></select>
+        <label style="font-size:14px; font-weight:bold; color:#555;">🗣 Select Voice Tone:</label>
+        <div class="voice-control">
+            <select id="voiceSelect"><option>Loading...</option></select>
+            <button class="btn-test" onclick="testVoice()">🔊 Test</button>
         </div>
-        <div class="setting-row">
-            <label>⚡ Speed:</label>
-            <div style="display:flex; align-items:center; gap:10px; width: 70%;">
-                <input type="range" id="rate" min="0.5" max="1.5" step="0.1" value="0.9" style="flex:1;">
-                <span id="speed-val" style="font-weight:bold; width: 40px;">0.9x</span>
-            </div>
+        
+        <div class="speed-control">
+            <label style="font-size:14px; font-weight:bold; color:#555;">⚡ Speed:</label>
+            <input type="range" id="rate" min="0.5" max="1.5" step="0.1" value="0.9">
+            <span id="speed-val" style="font-weight:bold; font-size:14px; width:40px; text-align:right;">0.9x</span>
         </div>
     </div>
 
     <div class="main-actions">
-        <button class="btn-play" onclick="startCustomPlay()">▶ Play Selected</button>
+        <button class="btn-play" onclick="startCustomPlay()">▶ Start Reading</button>
         <button id="pauseBtn" class="btn-pause" onclick="togglePause()">⏸ Pause</button>
         <button class="btn-stop" onclick="stopEverything()">🛑 Reset</button>
     </div>
@@ -176,7 +189,6 @@
     const letterMap = {'A': '1', 'B': '2', 'C': '3', 'D': '4'};
     const subjects = ['Mathematics', 'Physics', 'Chemistry', 'Biology'];
 
-    // --- VARIABLES ---
     let synth = window.speechSynthesis;
     let voices = [];
     let playlist = [];
@@ -184,7 +196,7 @@
     let isPaused = false;
     let currentUtterance = null;
 
-    // --- VOICE LOADING ---
+    // --- LOAD VOICES ---
     function populateVoices() {
         voices = synth.getVoices();
         const voiceSelect = document.getElementById('voiceSelect');
@@ -192,24 +204,55 @@
 
         if(voices.length === 0) {
             let opt = document.createElement('option');
-            opt.textContent = "Default Voice";
+            opt.textContent = "Default System Voice";
             voiceSelect.appendChild(opt);
             return;
         }
 
+        // Try to sort or prioritize English voices
+        voices.sort(function (a, b) {
+            const aname = a.name.toUpperCase(), bname = b.name.toUpperCase();
+            if ( aname < bname ) return -1;
+            if ( aname > bname ) return 1;
+            return 0;
+        });
+
         voices.forEach((voice, index) => {
-            const option = document.createElement('option');
-            option.textContent = `${voice.name} (${voice.lang})`;
-            option.value = index;
-            // Select a default English voice if possible
-            if (voice.default) option.selected = true;
-            voiceSelect.appendChild(option);
+            // Filter only English voices to keep list clean, or remove this if logic if you want all
+            // if(voice.lang.includes('en')) { 
+                const option = document.createElement('option');
+                option.textContent = `${voice.name} (${voice.lang})`;
+                option.value = index;
+                
+                // Add icons for common names
+                if(voice.name.includes("David") || voice.name.includes("Male")) {
+                    option.textContent = "👨 " + option.textContent;
+                } else if(voice.name.includes("Zira") || voice.name.includes("Female") || voice.name.includes("Google")) {
+                    option.textContent = "👩 " + option.textContent;
+                }
+
+                if (voice.default) option.selected = true;
+                voiceSelect.appendChild(option);
+            // }
         });
     }
 
     populateVoices();
     if (speechSynthesis.onvoiceschanged !== undefined) {
         speechSynthesis.onvoiceschanged = populateVoices;
+    }
+
+    // --- TEST VOICE ---
+    function testVoice() {
+        synth.cancel(); // Stop any current reading
+        const voiceIndex = document.getElementById('voiceSelect').value;
+        const rate = document.getElementById('rate').value;
+        
+        let utter = new SpeechSynthesisUtterance("This is a test. Question One, Option A.");
+        utter.rate = rate;
+        if(voices[voiceIndex]) utter.voice = voices[voiceIndex];
+        
+        synth.speak(utter);
     }
 
     // --- UI HELPERS ---
@@ -256,7 +299,7 @@
         });
 
         if(!anySelected) {
-            alert("Please select a subject!");
+            alert("Please select at least one subject!");
             return [];
         }
         return items;
@@ -286,7 +329,6 @@
         currentUtterance = new SpeechSynthesisUtterance(item.text);
         currentUtterance.rate = rate;
         
-        // APPLY SELECTED VOICE
         const voiceIndex = document.getElementById('voiceSelect').value;
         if(voices[voiceIndex]) {
             currentUtterance.voice = voices[voiceIndex];
