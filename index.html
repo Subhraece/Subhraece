@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Multi-Voice Audio Key</title>
+    <title>Simple Audio Key</title>
     <style>
         body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
@@ -43,34 +43,40 @@
         .start-group { font-size: 14px; color: #666; display: flex; align-items: center; gap: 5px;}
         .q-input { width: 50px; padding: 5px; border: 1px solid #ccc; border-radius: 4px; text-align: center; font-weight: bold;}
 
-        /* Voice Settings */
-        .settings-box {
+        /* Voice Selection (Simple) */
+        .voice-box {
             background: #eef2f3;
             padding: 15px;
             border-radius: 8px;
             margin-bottom: 20px;
-            border: 1px solid #dde1e3;
+            text-align: center;
         }
-        .voice-control {
+        .radio-group {
             display: flex;
-            gap: 10px;
+            justify-content: center;
+            gap: 20px;
             margin-bottom: 10px;
         }
-        select {
-            flex: 1;
-            padding: 8px;
-            border-radius: 5px;
-            border: 1px solid #bdc3c7;
-            font-size: 14px;
+        .radio-label {
+            font-size: 16px;
+            font-weight: bold;
+            cursor: pointer;
+            padding: 10px 20px;
+            background: white;
+            border-radius: 20px;
+            border: 2px solid #bdc3c7;
+            transition: 0.2s;
+            display: flex;
+            align-items: center;
+            gap: 5px;
         }
-        .btn-test {
+        
+        /* Checkbox styling hacks for looks */
+        input[type="radio"] { display: none; }
+        input[type="radio"]:checked + .radio-label {
             background-color: #3498db;
             color: white;
-            border: none;
-            border-radius: 5px;
-            padding: 0 15px;
-            cursor: pointer;
-            font-size: 13px;
+            border-color: #3498db;
         }
 
         /* Speed Control */
@@ -78,8 +84,9 @@
             display: flex;
             align-items: center;
             gap: 10px;
+            margin-top: 10px;
+            justify-content: center;
         }
-        input[type=range] { flex: 1; }
 
         /* Main Buttons */
         .main-actions {
@@ -102,6 +109,7 @@
         .btn-play { background-color: #27ae60; grid-column: span 2; font-size: 18px;}
         .btn-pause { background-color: #e67e22; }
         .btn-stop { background-color: #c0392b; }
+        .btn-test { background-color: #7f8c8d; font-size: 12px; padding: 5px 10px; border-radius: 15px; margin-left: 10px;}
 
         /* Display */
         .display-area {
@@ -130,39 +138,42 @@
 <body>
 
 <div class="container">
-    <h1>🎧 Exam Audio Assistant</h1>
-    <p>Select Subjects & Customize Voice</p>
+    <h1>🎧 Audio Key</h1>
+    <p>Select Subjects & Voice</p>
 
     <div class="subject-list">
         <div class="subject-row">
             <label class="chk-group"><input type="checkbox" id="chk-Mathematics" checked> Mathematics</label>
-            <div class="start-group">Start Q: <input type="number" id="start-Mathematics" class="q-input" value="1" min="1" max="25"></div>
+            <div class="start-group">Q: <input type="number" id="start-Mathematics" class="q-input" value="1" min="1" max="25"></div>
         </div>
         <div class="subject-row">
             <label class="chk-group"><input type="checkbox" id="chk-Physics" checked> Physics</label>
-            <div class="start-group">Start Q: <input type="number" id="start-Physics" class="q-input" value="1" min="1" max="25"></div>
+            <div class="start-group">Q: <input type="number" id="start-Physics" class="q-input" value="1" min="1" max="25"></div>
         </div>
         <div class="subject-row">
             <label class="chk-group"><input type="checkbox" id="chk-Chemistry" checked> Chemistry</label>
-            <div class="start-group">Start Q: <input type="number" id="start-Chemistry" class="q-input" value="1" min="1" max="25"></div>
+            <div class="start-group">Q: <input type="number" id="start-Chemistry" class="q-input" value="1" min="1" max="25"></div>
         </div>
         <div class="subject-row">
             <label class="chk-group"><input type="checkbox" id="chk-Biology" checked> Biology</label>
-            <div class="start-group">Start Q: <input type="number" id="start-Biology" class="q-input" value="1" min="1" max="25"></div>
+            <div class="start-group">Q: <input type="number" id="start-Biology" class="q-input" value="1" min="1" max="25"></div>
         </div>
     </div>
 
-    <div class="settings-box">
-        <label style="font-size:14px; font-weight:bold; color:#555;">🗣 Select Voice Tone:</label>
-        <div class="voice-control">
-            <select id="voiceSelect"><option>Loading...</option></select>
-            <button class="btn-test" onclick="testVoice()">🔊 Test</button>
+    <div class="voice-box">
+        <div class="radio-group">
+            <input type="radio" id="voiceMale" name="voiceGender" value="male" checked>
+            <label for="voiceMale" class="radio-label">👨 Male</label>
+
+            <input type="radio" id="voiceFemale" name="voiceGender" value="female">
+            <label for="voiceFemale" class="radio-label">👩 Female</label>
         </div>
         
         <div class="speed-control">
-            <label style="font-size:14px; font-weight:bold; color:#555;">⚡ Speed:</label>
+            <button class="btn-test" onclick="testVoice()">🔊 Check Voice</button>
+            <label style="margin-left: 15px;">Speed:</label>
             <input type="range" id="rate" min="0.5" max="1.5" step="0.1" value="0.9">
-            <span id="speed-val" style="font-weight:bold; font-size:14px; width:40px; text-align:right;">0.9x</span>
+            <span id="speed-val">0.9x</span>
         </div>
     </div>
 
@@ -196,73 +207,47 @@
     let isPaused = false;
     let currentUtterance = null;
 
-    // --- LOAD VOICES ---
-    function populateVoices() {
+    // --- VOICE LOGIC (AUTO DETECT) ---
+    function loadVoices() {
         voices = synth.getVoices();
-        const voiceSelect = document.getElementById('voiceSelect');
-        voiceSelect.innerHTML = '';
-
-        if(voices.length === 0) {
-            let opt = document.createElement('option');
-            opt.textContent = "Default System Voice";
-            voiceSelect.appendChild(opt);
-            return;
-        }
-
-        // Try to sort or prioritize English voices
-        voices.sort(function (a, b) {
-            const aname = a.name.toUpperCase(), bname = b.name.toUpperCase();
-            if ( aname < bname ) return -1;
-            if ( aname > bname ) return 1;
-            return 0;
-        });
-
-        voices.forEach((voice, index) => {
-            // Filter only English voices to keep list clean, or remove this if logic if you want all
-            // if(voice.lang.includes('en')) { 
-                const option = document.createElement('option');
-                option.textContent = `${voice.name} (${voice.lang})`;
-                option.value = index;
-                
-                // Add icons for common names
-                if(voice.name.includes("David") || voice.name.includes("Male")) {
-                    option.textContent = "👨 " + option.textContent;
-                } else if(voice.name.includes("Zira") || voice.name.includes("Female") || voice.name.includes("Google")) {
-                    option.textContent = "👩 " + option.textContent;
-                }
-
-                if (voice.default) option.selected = true;
-                voiceSelect.appendChild(option);
-            // }
-        });
     }
-
-    populateVoices();
+    loadVoices();
     if (speechSynthesis.onvoiceschanged !== undefined) {
-        speechSynthesis.onvoiceschanged = populateVoices;
+        speechSynthesis.onvoiceschanged = loadVoices;
     }
 
-    // --- TEST VOICE ---
+    function getSelectedVoice() {
+        const gender = document.querySelector('input[name="voiceGender"]:checked').value;
+        let selectedVoice = null;
+
+        if (gender === 'male') {
+            // Try to find a voice named David, Male, or Daniel
+            selectedVoice = voices.find(v => v.name.includes("David") || v.name.includes("Male") || v.name.includes("Daniel"));
+            // Fallback: If no male found, take the very first English voice (often default)
+            if (!selectedVoice) selectedVoice = voices[0];
+        } else {
+            // Try to find Zira, Female, Google US, or Samantha
+            selectedVoice = voices.find(v => v.name.includes("Zira") || v.name.includes("Female") || v.name.includes("Google") || v.name.includes("Samantha"));
+            // Fallback: If no female found, try to take the 2nd voice available
+            if (!selectedVoice && voices.length > 1) selectedVoice = voices[1];
+            if (!selectedVoice) selectedVoice = voices[0];
+        }
+        return selectedVoice;
+    }
+
     function testVoice() {
-        synth.cancel(); // Stop any current reading
-        const voiceIndex = document.getElementById('voiceSelect').value;
-        const rate = document.getElementById('rate').value;
-        
-        let utter = new SpeechSynthesisUtterance("This is a test. Question One, Option A.");
-        utter.rate = rate;
-        if(voices[voiceIndex]) utter.voice = voices[voiceIndex];
-        
+        synth.cancel();
+        let utter = new SpeechSynthesisUtterance("Testing voice. Question 1, Answer 4.");
+        utter.rate = document.getElementById('rate').value;
+        utter.voice = getSelectedVoice();
         synth.speak(utter);
     }
 
-    // --- UI HELPERS ---
-    const display = document.getElementById('display');
-    const pauseBtn = document.getElementById('pauseBtn');
+    // --- PLAYBACK ENGINE ---
     document.getElementById('rate').addEventListener('input', (e) => {
         document.getElementById('speed-val').innerText = `${e.target.value}x`;
     });
 
-    // --- PLAYBACK LOGIC ---
     function generatePlaylist() {
         let items = [];
         let anySelected = false;
@@ -274,11 +259,7 @@
                 const rawList = answerData[sub];
                 let startIndex = Math.max(0, Math.min(startQ - 1, rawList.length - 1));
 
-                items.push({
-                    text: sub,
-                    html: `<div class='active-subject'>${sub}</div>Starting...`,
-                    type: 'title'
-                });
+                items.push({ text: sub, html: `<div class='active-subject'>${sub}</div>Starting...`});
 
                 for (let i = startIndex; i < rawList.length; i++) {
                     let parts = rawList[i].split(" ");
@@ -291,17 +272,13 @@
 
                     items.push({
                         text: speak,
-                        html: `<div class='active-subject'>${sub}</div>${qNum} ➝ ${optLet}<br><span class='sub-text'>[Audio: ${optNum}]</span>`,
-                        type: 'question'
+                        html: `<div class='active-subject'>${sub}</div>${qNum} ➝ ${optLet}<br><span class='sub-text'>[Audio: ${optNum}]</span>`
                     });
                 }
             }
         });
 
-        if(!anySelected) {
-            alert("Please select at least one subject!");
-            return [];
-        }
+        if(!anySelected) { alert("Please select a subject!"); return []; }
         return items;
     }
 
@@ -325,14 +302,9 @@
         pauseBtn.innerText = "⏸ Pause";
         isPaused = false;
 
-        let rate = document.getElementById('rate').value;
         currentUtterance = new SpeechSynthesisUtterance(item.text);
-        currentUtterance.rate = rate;
-        
-        const voiceIndex = document.getElementById('voiceSelect').value;
-        if(voices[voiceIndex]) {
-            currentUtterance.voice = voices[voiceIndex];
-        }
+        currentUtterance.rate = document.getElementById('rate').value;
+        currentUtterance.voice = getSelectedVoice();
 
         currentUtterance.onend = function() {
             if (!isPaused) {
@@ -340,7 +312,6 @@
                 playQueue();
             }
         };
-
         synth.speak(currentUtterance);
     }
 
