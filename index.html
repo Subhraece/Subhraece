@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Answer Key Audio Player</title>
+    <title>Answer Key Audio (Fast Mode)</title>
     <style>
         body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
@@ -22,7 +22,7 @@
             width: 100%;
             text-align: center;
         }
-        h1 { color: #333; margin-bottom: 20px; }
+        h1 { color: #333; margin-bottom: 20px; font-size: 22px;}
         
         .controls {
             display: grid;
@@ -52,14 +52,17 @@
 
         .display-area {
             margin-top: 20px;
-            font-size: 24px;
+            font-size: 40px; /* ফন্ট বড় করা হয়েছে যাতে দূর থেকে দেখা যায় */
             font-weight: bold;
             color: #2c3e50;
-            min-height: 50px;
+            min-height: 60px;
             padding: 20px;
             background: #ecf0f1;
             border-radius: 5px;
             border: 2px solid #bdc3c7;
+            display: flex;
+            align-items: center;
+            justify-content: center;
         }
 
         .speed-control {
@@ -76,17 +79,16 @@
 <body>
 
 <div class="container">
-    <h1>🔊 Answer Key Audio</h1>
-    <p>Select a subject to hear the answers:</p>
-
+    <h1>🔊 Fast Answer Checker</h1>
+    
     <div class="speed-control">
-        <label for="rate">Reading Speed:</label>
+        <label for="rate">Speed:</label>
         <input type="range" id="rate" min="0.5" max="1.5" step="0.1" value="0.9">
         <span id="speed-val">Normal</span>
     </div>
 
     <div class="controls">
-        <button class="btn-math" onclick="readAnswers('Mathematics')">Mathematics</button>
+        <button class="btn-math" onclick="readAnswers('Mathematics')">Math</button>
         <button class="btn-phy" onclick="readAnswers('Physics')">Physics</button>
         <button class="btn-chem" onclick="readAnswers('Chemistry')">Chemistry</button>
         <button class="btn-bio" onclick="readAnswers('Biology')">Biology</button>
@@ -94,12 +96,11 @@
     </div>
 
     <div id="display" class="display-area">
-        Press a button to start...
+        Ready
     </div>
 </div>
 
 <script>
-    // Data extracted from the image
     const answerData = {
         'Mathematics': [
             "1 D", "2 C", "3 C", "4 C", "5 C", 
@@ -132,72 +133,63 @@
     };
 
     let synth = window.speechSynthesis;
-    let currentUtterance = null;
 
-    // Update speed label
     document.getElementById('rate').addEventListener('input', function(e) {
         let val = e.target.value;
-        let text = "Normal";
-        if(val < 0.9) text = "Slow";
-        if(val > 1.1) text = "Fast";
-        document.getElementById('speed-val').innerText = text + ` (${val}x)`;
+        document.getElementById('speed-val').innerText = `${val}x`;
     });
 
     function stopReading() {
         if (synth.speaking) {
             synth.cancel();
-            document.getElementById('display').innerText = "Stopped.";
+            document.getElementById('display').innerText = "Stopped";
         }
     }
 
     function readAnswers(subject) {
-        // Stop any previous reading
         stopReading();
 
         const answers = answerData[subject];
         const rate = document.getElementById('rate').value;
         const display = document.getElementById('display');
         
-        // Announce Subject first
-        let titleUtterance = new SpeechSynthesisUtterance(subject + " Answers.");
+        // Subject announcement
+        let titleUtterance = new SpeechSynthesisUtterance(subject);
         titleUtterance.rate = rate;
         synth.speak(titleUtterance);
         
-        display.innerText = `Reading ${subject}...`;
+        display.innerText = subject;
 
-        // Loop through answers and queue them
-        answers.forEach((item, index) => {
+        answers.forEach((item) => {
             let parts = item.split(" ");
             let questionNum = parts[0];
             let option = parts[1];
-            let extra = parts.slice(2).join(" "); // For 'Grace' marks
+            let extra = parts.slice(2).join(" "); 
 
-            // Create readable text. Example: "Question 1. Option D."
-            let speakText = `Question ${questionNum}, Option ${option}`;
+            // CHANGE: Short format "1... D"
+            // The comma creates a micro-pause which is better for listening
+            let speakText = `${questionNum}, ${option}`;
             
             if(extra) {
-                speakText += `, ${extra}`; // Mention if it's grace
+                speakText += `, ${extra}`; 
             }
 
             let utter = new SpeechSynthesisUtterance(speakText);
             utter.rate = rate;
-            utter.pitch = 1;
-
-            // When this specific line starts speaking, update the display
+            
+            // On start of each number, update display
             utter.onstart = function() {
-                display.innerText = `${subject}: ${item}`;
-                display.style.borderColor = "#3498db";
+                // Display looks like "1 -> D"
+                display.innerText = `${questionNum} ➝ ${option} ${extra ? '('+extra+')' : ''}`;
             };
 
             synth.speak(utter);
         });
 
-        // Final completion message
-        let endUtter = new SpeechSynthesisUtterance("End of " + subject);
+        let endUtter = new SpeechSynthesisUtterance("Done");
         endUtter.rate = rate;
         endUtter.onstart = function() {
-            display.innerText = "Finished.";
-            display.style.borderColor = "#2ecc71";
+            display.innerText = "Done ✅";
         };
         synth.speak(endUtter);
     }
