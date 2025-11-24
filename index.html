@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Custom Answer Audio</title>
+    <title>Ultimate Audio Key</title>
     <style>
         body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
@@ -24,7 +24,7 @@
         h1 { color: #2c3e50; text-align: center; font-size: 22px; margin-bottom: 5px;}
         p { color: #7f8c8d; text-align: center; font-size: 14px; margin-bottom: 20px;}
 
-        /* Selection List */
+        /* Subject List */
         .subject-list {
             margin-bottom: 20px;
             background: #f8f9fa;
@@ -32,54 +32,40 @@
             border-radius: 8px;
             border: 1px solid #e1e4e8;
         }
-
         .subject-row {
             display: flex;
             justify-content: space-between;
             align-items: center;
-            padding: 10px;
+            padding: 8px 10px;
             border-bottom: 1px solid #eee;
         }
         .subject-row:last-child { border-bottom: none; }
 
-        .chk-group {
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            font-size: 16px;
-            font-weight: bold;
-            color: #34495e;
-            cursor: pointer;
-        }
-        input[type="checkbox"] {
-            width: 18px;
-            height: 18px;
-            cursor: pointer;
-        }
+        .chk-group { font-weight: bold; color: #34495e; cursor: pointer; display: flex; align-items: center; gap: 8px;}
+        .start-group { font-size: 14px; color: #666; display: flex; align-items: center; gap: 5px;}
+        .q-input { width: 45px; padding: 4px; border: 1px solid #ccc; border-radius: 4px; text-align: center; font-weight: bold;}
 
-        .start-group {
-            display: flex;
-            align-items: center;
-            gap: 5px;
-            font-size: 14px;
-            color: #666;
-        }
-        .q-input {
-            width: 50px;
-            padding: 5px;
-            border: 1px solid #ccc;
-            border-radius: 4px;
-            text-align: center;
-            font-weight: bold;
-        }
-
-        /* Speed Control */
-        .speed-control {
+        /* Settings Area (Voice & Speed) */
+        .settings-box {
+            background: #eef2f3;
+            padding: 15px;
+            border-radius: 8px;
             margin-bottom: 15px;
+        }
+        .setting-row {
             display: flex;
-            justify-content: center;
+            justify-content: space-between;
             align-items: center;
-            gap: 10px;
+            margin-bottom: 10px;
+        }
+        .setting-row:last-child { margin-bottom: 0; }
+        
+        select {
+            width: 70%;
+            padding: 8px;
+            border-radius: 5px;
+            border: 1px solid #bdc3c7;
+            font-size: 14px;
         }
 
         /* Buttons */
@@ -100,31 +86,30 @@
             transition: 0.2s;
         }
         button:active { transform: scale(0.98); }
-
         .btn-play { background-color: #27ae60; grid-column: span 2; font-size: 18px;}
         .btn-pause { background-color: #e67e22; }
         .btn-stop { background-color: #c0392b; }
 
-        /* Display Screen */
+        /* Display */
         .display-area {
             margin-top: 10px;
             font-size: 32px;
             font-weight: bold;
             color: #2c3e50;
-            min-height: 100px;
-            padding: 20px;
+            min-height: 90px;
+            padding: 15px;
             background: #fff;
             border: 2px solid #bdc3c7;
             border-radius: 8px;
+            text-align: center;
             display: flex;
             flex-direction: column;
             align-items: center;
             justify-content: center;
-            text-align: center;
         }
-        .sub-text { font-size: 16px; color: #95a5a6; margin-top: 5px; font-weight: normal; }
+        .sub-text { font-size: 16px; color: #95a5a6; font-weight: normal; margin-top: 5px;}
         .active-subject { font-size: 18px; color: #8e44ad; margin-bottom: 5px; text-transform: uppercase;}
-
+        
         .playing { border-color: #2ecc71; background-color: #f0fff4; }
         .paused { border-color: #e67e22; background-color: #fffaf0; }
     </style>
@@ -132,53 +117,40 @@
 <body>
 
 <div class="container">
-    <h1>🎛️ Custom Audio Key</h1>
-    <p>Select subjects & start numbers</p>
+    <h1>🔊 Ultimate Audio Key</h1>
+    <p>Select Subjects, Voice & Speed</p>
 
     <div class="subject-list">
-        
         <div class="subject-row">
-            <label class="chk-group">
-                <input type="checkbox" id="chk-Mathematics" checked> Mathematics
-            </label>
-            <div class="start-group">
-                Start Q: <input type="number" id="start-Mathematics" class="q-input" value="1" min="1" max="25">
-            </div>
+            <label class="chk-group"><input type="checkbox" id="chk-Mathematics" checked> Mathematics</label>
+            <div class="start-group">Q: <input type="number" id="start-Mathematics" class="q-input" value="1" min="1" max="25"></div>
         </div>
-
         <div class="subject-row">
-            <label class="chk-group">
-                <input type="checkbox" id="chk-Physics" checked> Physics
-            </label>
-            <div class="start-group">
-                Start Q: <input type="number" id="start-Physics" class="q-input" value="1" min="1" max="25">
-            </div>
+            <label class="chk-group"><input type="checkbox" id="chk-Physics" checked> Physics</label>
+            <div class="start-group">Q: <input type="number" id="start-Physics" class="q-input" value="1" min="1" max="25"></div>
         </div>
-
         <div class="subject-row">
-            <label class="chk-group">
-                <input type="checkbox" id="chk-Chemistry" checked> Chemistry
-            </label>
-            <div class="start-group">
-                Start Q: <input type="number" id="start-Chemistry" class="q-input" value="1" min="1" max="25">
-            </div>
+            <label class="chk-group"><input type="checkbox" id="chk-Chemistry" checked> Chemistry</label>
+            <div class="start-group">Q: <input type="number" id="start-Chemistry" class="q-input" value="1" min="1" max="25"></div>
         </div>
-
         <div class="subject-row">
-            <label class="chk-group">
-                <input type="checkbox" id="chk-Biology" checked> Biology
-            </label>
-            <div class="start-group">
-                Start Q: <input type="number" id="start-Biology" class="q-input" value="1" min="1" max="25">
-            </div>
+            <label class="chk-group"><input type="checkbox" id="chk-Biology" checked> Biology</label>
+            <div class="start-group">Q: <input type="number" id="start-Biology" class="q-input" value="1" min="1" max="25"></div>
         </div>
-
     </div>
 
-    <div class="speed-control">
-        <label>Speed:</label>
-        <input type="range" id="rate" min="0.5" max="1.5" step="0.1" value="0.9">
-        <span id="speed-val">0.9x</span>
+    <div class="settings-box">
+        <div class="setting-row">
+            <label>🗣 Voice:</label>
+            <select id="voiceSelect"><option>Loading voices...</option></select>
+        </div>
+        <div class="setting-row">
+            <label>⚡ Speed:</label>
+            <div style="display:flex; align-items:center; gap:10px; width: 70%;">
+                <input type="range" id="rate" min="0.5" max="1.5" step="0.1" value="0.9" style="flex:1;">
+                <span id="speed-val" style="font-weight:bold; width: 40px;">0.9x</span>
+            </div>
+        </div>
     </div>
 
     <div class="main-actions">
@@ -195,80 +167,82 @@
 <script>
     // --- DATA ---
     const answerData = {
-        'Mathematics': [
-            "1 D", "2 C", "3 C", "4 C", "5 C", "6 B", "7 A", "8 B", "9 C", "10 D", 
-            "11 C", "12 C", "13 A", "14 A", "15 C", "16 C", "17 B", "18 A", "19 D", "20 A", 
-            "21 B", "22 D", "23 B", "24 B", "25 A"
-        ],
-        'Physics': [
-            "1 B", "2 C", "3 B", "4 B", "5 A", "6 B", "7 D", "8 B", "9 C", "10 C", 
-            "11 A", "12 C", "13 B", "14 C", "15 A", "16 C", "17 A", "18 B", "19 C", "20 A", 
-            "21 A", "22 B", "23 A", "24 A", "25 A"
-        ],
-        'Chemistry': [
-            "1 C", "2 C", "3 A", "4 C", "5 A", "6 D", "7 C", "8 B", "9 B", "10 B", 
-            "11 B", "12 D", "13 C", "14 D", "15 B", "16 B", "17 B", "18 A", "19 B", "20 D", 
-            "21 C", "22 B", "23 B", "24 C", "25 C"
-        ],
-        'Biology': [
-            "1 C", "2 B", "3 B", "4 A", "5 D", "6 C Grace", "7 C Grace", "8 A Grace", "9 A", "10 C", 
-            "11 B", "12 B", "13 C Grace", "14 C", "15 B", "16 A", "17 D", "18 B", "19 D", "20 A", 
-            "21 B Grace", "22 B", "23 D", "24 A", "25 C"
-        ]
+        'Mathematics': ["1 D", "2 C", "3 C", "4 C", "5 C", "6 B", "7 A", "8 B", "9 C", "10 D", "11 C", "12 C", "13 A", "14 A", "15 C", "16 C", "17 B", "18 A", "19 D", "20 A", "21 B", "22 D", "23 B", "24 B", "25 A"],
+        'Physics': ["1 B", "2 C", "3 B", "4 B", "5 A", "6 B", "7 D", "8 B", "9 C", "10 C", "11 A", "12 C", "13 B", "14 C", "15 A", "16 C", "17 A", "18 B", "19 C", "20 A", "21 A", "22 B", "23 A", "24 A", "25 A"],
+        'Chemistry': ["1 C", "2 C", "3 A", "4 C", "5 A", "6 D", "7 C", "8 B", "9 B", "10 B", "11 B", "12 D", "13 C", "14 D", "15 B", "16 B", "17 B", "18 A", "19 B", "20 D", "21 C", "22 B", "23 B", "24 C", "25 C"],
+        'Biology': ["1 C", "2 B", "3 B", "4 A", "5 D", "6 C Grace", "7 C Grace", "8 A Grace", "9 A", "10 C", "11 B", "12 B", "13 C Grace", "14 C", "15 B", "16 A", "17 D", "18 B", "19 D", "20 A", "21 B Grace", "22 B", "23 D", "24 A", "25 C"]
     };
 
     const letterMap = {'A': '1', 'B': '2', 'C': '3', 'D': '4'};
     const subjects = ['Mathematics', 'Physics', 'Chemistry', 'Biology'];
 
-    // --- STATE ---
+    // --- VARIABLES ---
     let synth = window.speechSynthesis;
+    let voices = [];
     let playlist = [];
     let currentIndex = 0;
     let isPaused = false;
     let currentUtterance = null;
 
+    // --- VOICE LOADING ---
+    function populateVoices() {
+        voices = synth.getVoices();
+        const voiceSelect = document.getElementById('voiceSelect');
+        voiceSelect.innerHTML = '';
+
+        if(voices.length === 0) {
+            let opt = document.createElement('option');
+            opt.textContent = "Default Voice";
+            voiceSelect.appendChild(opt);
+            return;
+        }
+
+        voices.forEach((voice, index) => {
+            const option = document.createElement('option');
+            option.textContent = `${voice.name} (${voice.lang})`;
+            option.value = index;
+            // Select a default English voice if possible
+            if (voice.default) option.selected = true;
+            voiceSelect.appendChild(option);
+        });
+    }
+
+    populateVoices();
+    if (speechSynthesis.onvoiceschanged !== undefined) {
+        speechSynthesis.onvoiceschanged = populateVoices;
+    }
+
     // --- UI HELPERS ---
     const display = document.getElementById('display');
     const pauseBtn = document.getElementById('pauseBtn');
-    
     document.getElementById('rate').addEventListener('input', (e) => {
         document.getElementById('speed-val').innerText = `${e.target.value}x`;
     });
 
-    // --- LOGIC ---
+    // --- PLAYBACK LOGIC ---
     function generatePlaylist() {
         let items = [];
         let anySelected = false;
 
         subjects.forEach(sub => {
-            const isChecked = document.getElementById(`chk-${sub}`).checked;
-            
-            if (isChecked) {
+            if (document.getElementById(`chk-${sub}`).checked) {
                 anySelected = true;
-                const startVal = document.getElementById(`start-${sub}`).value;
-                const startQ = parseInt(startVal) || 1;
-                
-                // Get data for this subject
+                const startQ = parseInt(document.getElementById(`start-${sub}`).value) || 1;
                 const rawList = answerData[sub];
-                let startIndex = startQ - 1;
-                if(startIndex < 0) startIndex = 0;
-                if(startIndex >= rawList.length) startIndex = 0;
+                let startIndex = Math.max(0, Math.min(startQ - 1, rawList.length - 1));
 
-                // Title
                 items.push({
                     text: sub,
                     html: `<div class='active-subject'>${sub}</div>Starting...`,
                     type: 'title'
                 });
 
-                // Questions
                 for (let i = startIndex; i < rawList.length; i++) {
                     let parts = rawList[i].split(" ");
                     let qNum = parts[0];
                     let optLet = parts[1];
                     let extra = parts.slice(2).join(" ");
                     let optNum = letterMap[optLet];
-
                     let speak = `${qNum}, ${optNum}`;
                     if (extra) speak += `, ${extra}`;
 
@@ -282,19 +256,16 @@
         });
 
         if(!anySelected) {
-            alert("Please select at least one subject!");
+            alert("Please select a subject!");
             return [];
         }
-
         return items;
     }
 
     function startCustomPlay() {
         stopEverything();
         playlist = generatePlaylist();
-        if(playlist.length > 0) {
-            playQueue();
-        }
+        if(playlist.length > 0) playQueue();
     }
 
     function playQueue() {
@@ -305,7 +276,6 @@
         }
 
         let item = playlist[currentIndex];
-        
         display.innerHTML = item.html;
         display.classList.add('playing');
         display.classList.remove('paused');
@@ -315,6 +285,12 @@
         let rate = document.getElementById('rate').value;
         currentUtterance = new SpeechSynthesisUtterance(item.text);
         currentUtterance.rate = rate;
+        
+        // APPLY SELECTED VOICE
+        const voiceIndex = document.getElementById('voiceSelect').value;
+        if(voices[voiceIndex]) {
+            currentUtterance.voice = voices[voiceIndex];
+        }
 
         currentUtterance.onend = function() {
             if (!isPaused) {
@@ -328,7 +304,6 @@
 
     function togglePause() {
         if (playlist.length === 0) return;
-
         if (isPaused) {
             isPaused = false;
             playQueue(); 
